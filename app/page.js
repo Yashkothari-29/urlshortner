@@ -5,7 +5,7 @@ import Link from "next/link";
 const poppins = localFont({
   src: "./fonts/Poppins-ExtraBold.ttf",
   variable: "--font-poppins",
-  weight: "100 , 900",
+  weight: "800",
 });
 
 export default function Home() {
@@ -26,8 +26,14 @@ export default function Home() {
             </div>
       </div>
       <div className=" flex justify-start relative">
-        <Image className="mix-blend-darken" src={"/vector.jpg"} alt="gfhj"  fill={true} />
-
+        <Image 
+          className="mix-blend-darken" 
+          src="/vector.jpg" 
+          alt="Vector illustration"
+          fill={true}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          priority
+        />
       </div>
 
      </section>
