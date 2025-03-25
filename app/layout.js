@@ -4,7 +4,7 @@ import Navbar from "@/Components/Navbar";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter",
+  display: 'swap',
 });
 
 export const metadata = {
@@ -14,8 +14,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} antialiased bg-purple-50`}>
+    <html lang="en" className={inter.className}>
+      <body className="antialiased bg-purple-50 min-h-screen">
         <Navbar/>
         {children}
       </body>
