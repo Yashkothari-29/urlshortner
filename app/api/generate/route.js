@@ -1,6 +1,7 @@
 import clientPromise from "@/lib/mongodb"
 
 export async function POST(request) {
+    let client;
     try {
         const body = await request.json()
         
@@ -24,7 +25,16 @@ export async function POST(request) {
             }, { status: 400 })
         }
 
-        const client = await clientPromise
+        // Validate shorturl format (only allow alphanumeric and hyphens)
+        if (!/^[a-zA-Z0-9-]+$/.test(body.shorturl)) {
+            return Response.json({
+                success: false,
+                error: true,
+                message: "Short URL can only contain letters, numbers, and hyphens"
+            }, { status: 400 })
+        }
+
+        client = await clientPromise
         const db = client.db("bitlinks")
         const collection = db.collection("url")
 
@@ -38,7 +48,7 @@ export async function POST(request) {
             }, { status: 409 })
         }
 
-        const result = await collection.insertOne({
+        await collection.insertOne({
             url: body.url,
             shorturl: body.shorturl,
             createdAt: new Date()
@@ -47,7 +57,8 @@ export async function POST(request) {
         return Response.json({
             success: true,
             error: false,
-            message: 'URL Generated Successfully'
+            message: 'URL Generated Successfully',
+            shortUrl: `${process.env.NEXT_PUBLIC_HOST}/${body.shorturl}`
         })
 
     } catch (error) {
@@ -55,7 +66,7 @@ export async function POST(request) {
         return Response.json({
             success: false,
             error: true,
-            message: "Internal Server Error"
+            message: error.message || "Internal Server Error"
         }, { status: 500 })
     }
 }
